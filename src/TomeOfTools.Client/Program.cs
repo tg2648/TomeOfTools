@@ -1,4 +1,4 @@
-using TomeOfTools.Components;
+using TomeOfTools.Client.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
