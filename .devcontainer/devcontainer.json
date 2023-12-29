@@ -28,6 +28,7 @@
 			"version": "latest"
 		}
 	},
+	"postCreateCommand": "npm install -g @azure/static-web-apps-cli && npm install -g azure-functions-core-tools@4 --unsafe-perm true",
 	"customizations": {
 		"vscode": {
 			"extensions": [
