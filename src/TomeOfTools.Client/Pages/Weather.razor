@@ -1,21 +1,13 @@
 ﻿@page "/weather"
-@attribute [StreamRendering]
 @inject HttpClient Http
 
 <PageTitle>Weather</PageTitle>
 
 <h1>Weather</h1>
 
-<p>This component demonstrates showing data.</p>
+<p>This component demonstrates fetching data from the server.</p>
 
-@if (fromApi == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <h3>From API: @fromApi</h3>
-}
+<p>From API: @fromApi</p>
 
 @if (forecasts == null)
 {
@@ -48,37 +40,22 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
-    private string fromApi = string.Empty;
+    private string? fromApi;
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-
-        try
-        {
-            fromApi = await Http.GetStringAsync("/api/SampleApi");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
+        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        fromApi = await Http.GetStringAsync("api/SampleApi");
     }
 
-    private class WeatherForecast
+    public class WeatherForecast
     {
         public DateOnly Date { get; set; }
+
         public int TemperatureC { get; set; }
+
         public string? Summary { get; set; }
+
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }
