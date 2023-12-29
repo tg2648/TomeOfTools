@@ -1,11 +1,21 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
+@inject HttpClient Http
 
 <PageTitle>Weather</PageTitle>
 
 <h1>Weather</h1>
 
 <p>This component demonstrates showing data.</p>
+
+@if (fromApi == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>From API: @fromApi</h3>
+}
 
 @if (forecasts == null)
 {
@@ -38,6 +48,7 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private string fromApi = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,6 +63,15 @@ else
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = summaries[Random.Shared.Next(summaries.Length)]
         }).ToArray();
+
+        try
+        {
+            fromApi = await Http.GetStringAsync("/api/SampleApi");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
     }
 
     private class WeatherForecast
