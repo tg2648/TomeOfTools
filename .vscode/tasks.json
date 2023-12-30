@@ -2,6 +2,51 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "run-development",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "run-client",
+        "run-api",
+        "run-swa"
+      ],
+    },
+    {
+      "label": "run-client",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/src/TomeOfTools.Client"
+      },
+      "command": "dotnet watch",
+      "presentation": {
+        "panel": "dedicated",
+      }
+    },
+    {
+      "label": "run-api",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/src/TomeOfTools.Api"
+      },
+      "command": "func start",
+      "presentation": {
+        "panel": "dedicated",
+      }
+    },
+    {
+      "label": "run-swa",
+      "type": "shell",
+      "command": "swa",
+      "args":[
+        "start",
+        "http://localhost:5215",
+        "--api-location",
+        "http://localhost:7071",
+      ],
+      "presentation": {
+        "panel": "dedicated",
+      },
+    },
+    {
       "label": "clean (functions)",
       "command": "dotnet",
       "args": [
